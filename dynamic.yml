@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /certs/traefic.lc.pem
+      keyFile: /certs/traefic.lc-key.pem

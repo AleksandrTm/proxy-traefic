@@ -1,0 +1,49 @@
+services:
+  traefik-proxy:
+    image: traefik:v3.3
+    container_name: traefik-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/certs:ro
+      - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
+    command:
+      - --api.dashboard=true
+      - --api.insecure=false
+
+      - --log.level=debug
+      - --log.format=json
+
+      - --providers.docker.network=proxy
+      - --providers.docker.exposedByDefault=false
+
+      - --providers.file.directory=/etc/traefik
+      - --providers.file.watch=true
+
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls=true"
+
+      - "traefik.http.routers.traefik.rule=Host(`traefik.lc`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=aleksandr:$$2y$$05$$k82YiL2oZAPq4zTHjy1WHukueBT2VztQ6IYKIhuYQKWx3OH8Y4QCu"
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: proxy
+    external: true
