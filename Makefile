@@ -1,4 +1,4 @@
-PROXY_NETWORK = proxy
+PROXY_NETWORK = net-global
 
 .PHONY: up down logs build network certs
 

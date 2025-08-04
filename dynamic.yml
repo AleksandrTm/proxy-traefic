@@ -1,4 +1,12 @@
 tls:
   certificates:
-    - certFile: /certs/traefic.lc.pem
-      keyFile: /certs/traefic.lc-key.pem
+    - certFile: /certs/traefik.lc.pem
+      keyFile: /certs/traefik.lc-key.pem
+    - certFile: /certs/core.lc.pem
+      keyFile: /certs/core.lc-key.pem
+    - certFile: /certs/friendshotels.lc.pem
+      keyFile: /certs/friendshotels.lc-key.pem
+    - certFile: /certs/rnb.lc.pem
+      keyFile: /certs/rnb.lc-key.pem
+    - certFile: /certs/gift-shop.lc.pem
+      keyFile: /certs/gift-shop.lc-key.pem

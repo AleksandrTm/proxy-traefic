@@ -1,7 +1,7 @@
 services:
-  traefik-proxy:
+  traefik:
     image: traefik:v3.3
-    container_name: traefik-proxy
+    container_name: traefik
     restart: always
     ports:
       - "80:80"
@@ -17,7 +17,7 @@ services:
       - --log.level=debug
       - --log.format=json
 
-      - --providers.docker.network=proxy
+      - --providers.docker.network=net-global
       - --providers.docker.exposedByDefault=false
 
       - --providers.file.directory=/etc/traefik
@@ -41,9 +41,9 @@ services:
       - "traefik.http.middlewares.traefik-auth.basicauth.users=aleksandr:$$2y$$05$$k82YiL2oZAPq4zTHjy1WHukueBT2VztQ6IYKIhuYQKWx3OH8Y4QCu"
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
     networks:
-      - proxy
+      - net-global
 
 networks:
-  proxy:
-    name: proxy
+  net-global:
+    name: net-global
     external: true
